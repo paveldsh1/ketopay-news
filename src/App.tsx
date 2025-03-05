@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./hooks";
 import { fetchNews } from "./newsSlice";
 import { RootState } from "./store";
 import { format } from "date-fns";
+import imgLogo from './images/img.png';
+import { ReactComponent as LoadingIcon } from './icons/icon_loading.svg';
 
 const App: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -17,11 +19,11 @@ const App: React.FC = () => {
     useEffect(() => {
         dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 }));
         const interval = setInterval(() => {
-          dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 }));
+            dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 }));
         }, 30000);
-    
+
         return () => clearInterval(interval);
-      }, [dispatch, currentDate]);
+    }, [dispatch, currentDate]);
 
     if (isMenuOpen) {
         return (
@@ -53,7 +55,7 @@ const App: React.FC = () => {
                 <div>BESIDER</div>
             </header>
             <hr className="container__line" />
-            
+
             {error && <p style={{ color: "red", textAlign: "center" }}>Ошибка: {error}</p>}
 
             <div className="container__news news">
@@ -79,7 +81,20 @@ const App: React.FC = () => {
                 )).reverse()}
             </div>
 
-            
+            <footer className="container__footer footer">
+                <div className="footer__loading-icon">
+                    <LoadingIcon width={36} height={36}/>
+                </div>
+                <div className="footer__links">
+                    <a href="#">Log In</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Publishers</a>
+                    <a href="#">Sitemap</a>
+                </div>
+                <div className="footer__powered">Powered by</div>
+                <img className="footer__logo" src={imgLogo} alt="Powered logo" />
+                <div className="footer__copyright">© 2023 Besider. Inspired by Insider</div>
+            </footer>
         </div>
     );
 };

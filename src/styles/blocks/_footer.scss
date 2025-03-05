@@ -1,2 +1,60 @@
 @use '../helpers' as *;
 
+.footer {
+    width: rem(240);
+    height: rem(272);
+    margin: rem(48) auto;
+
+    &__loading-icon {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__loading-icon svg {
+        color: #096FFA;
+    }
+
+    &__links {
+        margin-top: rem(60);
+        display: flex;
+        justify-content: space-between;
+
+        &>a {
+            text-decoration: none;
+            font-family: "Lato", sans-serif;
+            font-size: rem(12);
+            font-weight: 400;
+            line-height: rem(14);
+            letter-spacing: rem(0);
+            color: black;
+        }
+    }
+
+    &__powered {
+        margin-top: rem(24);
+        margin-bottom: rem(8.3);
+        text-align: center;
+        font-family: "Lato", sans-serif;
+        font-size: rem(12);
+        font-weight: 400;
+        line-height: rem(14);
+        letter-spacing: rem(0);
+        color: black;
+    }
+
+    &__logo {
+        display: block;
+        margin: 0 auto;
+    }
+
+    &__copyright {
+        margin-top: rem(24.7);
+        text-align: center;
+        font-family: "Lato", sans-serif;
+        font-size: rem(12);
+        font-weight: 400;
+        line-height: rem(14);
+        letter-spacing: rem(0);
+        color: black;
+    }
+}
