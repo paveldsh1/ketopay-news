@@ -1,0 +1,91 @@
+@use '../helpers' as *;
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    color: black;
+    font-size: rem(20);
+    font-weight: bold;
+
+
+    &__burger-button {
+        width: rem(20);
+        height: rem(15.75);
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        margin-top: rem(29);
+        margin-left: rem(20);
+        margin-bottom: rem(27.25);
+
+        & span {
+            width: 100%;
+            height: rem(2.25);
+            background-color: black;
+        }
+    }
+
+    &>*:nth-child(2) {
+        margin-left: rem(83);
+        margin-right: auto;
+        width: rem(112);
+        height: rem(29);
+        font-family: "Lato", sans-serif;
+        font-size: rem(24);
+        text-align: center;
+        line-height: rem(29);
+        font-weight: 700;
+        letter-spacing: 10%;
+    }
+
+    &__overlay{
+        margin: 0 auto;
+        width: rem(360);
+        height: rem(640);
+    }
+
+    &__close-button {
+        height: rem(20);
+        width: rem(20);
+        margin-top: rem(20);
+        margin-left: rem(320);
+        border: none;
+        background: none;
+        font-size: rem(32);
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__menu {
+        margin: 0 auto;
+        margin-top: rem(105);
+        width: rem(360);
+        height: rem(351);
+    }
+
+    &__menu-item {
+        margin-left: rem(20);
+
+        &:not(:first-child) {
+            margin-top: rem(28);
+        }
+    }
+
+    &__menu-item>a {
+        text-decoration: none;
+        font-family: "Lato", sans-serif;
+        font-size: rem(22);
+        line-height: rem(26);
+        font-weight: 700;
+        letter-spacing: rem(0.1375);
+        color: black;
+    }
+}

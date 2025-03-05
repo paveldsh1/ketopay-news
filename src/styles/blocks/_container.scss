@@ -1,0 +1,14 @@
+@use '../helpers' as *;
+
+.container {
+    max-width: rem(360);
+    height: rem(72);
+    margin: 0 auto;
+    background: rgb(255, 255, 255);
+
+    &__line {
+        margin: 0;
+        border: none;
+        border-bottom: rem(1) solid rgb(237, 237, 237);
+    }
+}

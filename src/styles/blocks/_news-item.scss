@@ -1,0 +1,49 @@
+@use '../helpers' as *;
+
+.news-item {
+    margin-top: rem(11);
+    width: rem(320);
+    height: rem(176);
+    display: flex;
+
+    &__image {
+        width: rem(99);
+        height: rem(74);
+        margin-top: rem(25);
+        margin-right: rem(12);
+    }
+
+    &__content {
+        max-width: rem(209);
+    }
+
+    &__source {
+        text-decoration: none;
+        font-family: "Lato", sans-serif;
+        font-size: rem(14);
+        font-weight: 800;
+        line-height: rem(17);
+        letter-spacing: 0%;
+    }
+
+    &__title {
+        font-family: "Lato", sans-serif;
+        font-size: rem(16);
+        font-weight: 400;
+        line-height: rem(22);
+        letter-spacing: 0%;
+        width: rem(209);
+        height: rem(110);
+        overflow: hidden;
+    }
+
+    &__date {
+        margin-top: rem(8);
+        font-family: "Lato", sans-serif;
+        color: rgb(109, 120, 122);
+        font-size: rem(14);
+        font-weight: 400;
+        line-height: rem(17);
+        letter-spacing: 0%;
+    }
+}
