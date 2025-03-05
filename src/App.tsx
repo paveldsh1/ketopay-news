@@ -16,7 +16,12 @@ const App: React.FC = () => {
 
     useEffect(() => {
         dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 }));
-    }, [dispatch, currentDate]);
+        const interval = setInterval(() => {
+          dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 }));
+        }, 30000);
+    
+        return () => clearInterval(interval);
+      }, [dispatch, currentDate]);
 
     if (isMenuOpen) {
         return (
@@ -71,7 +76,7 @@ const App: React.FC = () => {
                             </div>
                         ))}
                     </div>
-                ))}
+                )).reverse()}
             </div>
 
             
