@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_KEY = "vEJwp3nmtqMIO6FDqQwyQdjbTzJcbdAh";
-
 interface NewsArticle {
   pub_date: string;
   abstract: string;
@@ -23,21 +21,13 @@ const initialState: NewsState = {
   error: null,
 };
 
-export const fetchNews = createAsyncThunk<NewsArticle[], { year: number; month: number }>(
+export const fetchNews = createAsyncThunk(
   "news/fetchNews",
-  async ({ year, month }, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `https://cors-anywhere.herokuapp.com/https://api.nytimes.com/svc/archive/v1/${year}/${month}.json`,
-        {
-          params: { "api-key": API_KEY },
-        }
-      );
-
-      return response.data.response.docs;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Ошибка загрузки данных");
-    }
+  async ({ year, month }: { year: number; month: number }) => {
+      const response = await axios.get(`http://localhost:4000/news`, {
+          params: { year, month },
+      });
+      return response.data;
   }
 );
 
