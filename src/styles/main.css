@@ -352,6 +352,7 @@ svg * {
 }
 .footer__loading-icon svg {
   color: #096FFA;
+  animation: rotate 2s linear infinite;
 }
 .footer__links {
   margin-top: 3.75rem;
@@ -366,6 +367,9 @@ svg * {
   line-height: 0.875rem;
   letter-spacing: 0rem;
   color: black;
+}
+.footer__links > a:hover {
+  color: #096FFA;
 }
 .footer__powered {
   margin-top: 1.5rem;
@@ -391,6 +395,15 @@ svg * {
   line-height: 0.875rem;
   letter-spacing: 0rem;
   color: black;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /*# sourceMappingURL=main.css.map */

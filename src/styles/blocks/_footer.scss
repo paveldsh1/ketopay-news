@@ -12,6 +12,7 @@
 
     &__loading-icon svg {
         color: #096FFA;
+        animation: rotate 2s linear infinite;
     }
 
     &__links {
@@ -27,6 +28,10 @@
             line-height: rem(14);
             letter-spacing: rem(0);
             color: black;
+        }
+
+        &>a:hover {
+            color: #096FFA;
         }
     }
 
@@ -56,5 +61,14 @@
         line-height: rem(14);
         letter-spacing: rem(0);
         color: black;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
