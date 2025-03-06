@@ -5,6 +5,8 @@ import HeaderOverlay from "./HeaderOverlay";
 import Header from "./Header";
 import NewsList from "./NewsList";
 import Footer from "./Footer";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 
 const mockNewsData = [
     {
@@ -251,6 +253,7 @@ const mockNewsData = [
 
 const App: React.FC = () => {
     const dispatch = useAppDispatch();
+    // const { news, error } = useSelector((state: RootState) => state.news);
     const [news, setNews] = useState(mockNewsData);
     const [currentDate] = useState(new Date());
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -260,17 +263,24 @@ const App: React.FC = () => {
 
     useEffect(() => {
         const loadNews = async () => {
-            setIsLoading(true);
+            setIsLoading(true); 
             try {
                 await dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 })).unwrap();
             } catch (error) {
-                console.error("Ошибка при загрузке новостей", error);
+                if (error instanceof Error) {
+                    alert("Ошибка при загрузке новостей: " + error.message);
+                } else {
+                    console.error("Неизвестная ошибка:", error);
+                    alert("Ошибка при загрузке новостей");
+                }
             } finally {
                 setIsLoading(false);
             }
         };
+
         loadNews();
-    }, [currentDate, dispatch]);
+
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -281,7 +291,7 @@ const App: React.FC = () => {
                     setIsLoading(false);
                 }
             },
-            { threshold: 0.1 }
+            { threshold: 0.9 }
         );
 
         if (ref.current) {
@@ -293,7 +303,7 @@ const App: React.FC = () => {
                 observer.unobserve(ref.current);
             }
         };
-    }, [isLoading]);
+    }, []);
 
     return (
         <div className="container">
