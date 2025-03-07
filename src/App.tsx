@@ -285,7 +285,7 @@ const App: React.FC = () => {
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting) {
+                if (entries[0].isIntersecting && !loading) {
                     setVisibleNewsCount((prevCount) => prevCount + 5);
                 }
             },
@@ -301,7 +301,7 @@ const App: React.FC = () => {
                 observer.unobserve(ref.current);
             }
         };
-    }, []);
+    }, [loading]);
 
     const memoizedOnMenuOpen = useCallback(() => {
         setIsMenuOpen(true);
