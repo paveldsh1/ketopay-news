@@ -254,8 +254,8 @@ const mockNewsData = [
 const App: React.FC = () => {
     // console.log("App component rendered")
     const dispatch = useAppDispatch();
-    const { news, loading } = useSelector((state: RootState) => state.news);
-    // const [news, setNews] = useState(mockNewsData);
+    const { loading } = useSelector((state: RootState) => state.news);
+    const [news, setNews] = useState(mockNewsData);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [visibleNewsCount, setVisibleNewsCount] = useState(5);
     const ref = useRef<HTMLDivElement | null>(null);

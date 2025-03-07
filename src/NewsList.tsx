@@ -1,13 +1,27 @@
+import { useEffect, useState, memo } from "react";
 import { format } from "date-fns";
 import NewsItem from "./NewsItem";
-import { memo } from 'react';
 
 const NewsList = memo(({ news, visibleNewsCount }: { news: any[]; visibleNewsCount: number }) => {
-    // console.log('NewsList component rendered', news, visibleNewsCount);
+    const [displayedNewsCount, setDisplayedNewsCount] = useState(0);
+
+    useEffect(() => {
+        if (visibleNewsCount === 5) {
+            setDisplayedNewsCount((prev) => prev + 5);
+        }
+        else {
+            const timeout = setTimeout(() => {
+                setDisplayedNewsCount((prev) => prev + 5);
+            }, 2000);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [visibleNewsCount]);
+
     return (
         <div className="container__news news">
             {Object.entries(
-                news.slice(0, visibleNewsCount).reduce((acc: Record<string, any[]>, item) => {
+                news.slice(0, displayedNewsCount).reduce((acc: Record<string, any[]>, item) => {
                     const dateKey = format(new Date(item.pub_date), "dd.MM.yyyy");
                     acc[dateKey] = acc[dateKey] || [];
                     acc[dateKey].push(item);
@@ -22,7 +36,7 @@ const NewsList = memo(({ news, visibleNewsCount }: { news: any[]; visibleNewsCou
                 </div>
             ))}
         </div>
-    )
+    );
 });
 
 export default NewsList;
