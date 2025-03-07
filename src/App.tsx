@@ -264,18 +264,18 @@ const App: React.FC = () => {
     useEffect(() => {
         const fetchLatestNews = () => {
             dispatch(fetchNews({ year: new Date().getFullYear(), month: new Date().getMonth() + 1 }))
-              .unwrap()
-              .catch((error) => {
-                alert(error.error)
-              });
-          };
+                .unwrap()
+                .catch((error) => {
+                    alert(error.error)
+                });
+        };
 
-        fetchLatestNews();
-
-        const interval = setInterval(fetchLatestNews, 30000);
-
-        return () => clearInterval(interval);
-    }, []);
+        if (!isMenuOpen) {
+            fetchLatestNews();
+            const interval = setInterval(fetchLatestNews, 30000);
+            return () => clearInterval(interval);
+        }
+    }, [isMenuOpen]);
 
 
     useEffect(() => {
