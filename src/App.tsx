@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "./hooks";
 import { fetchNews } from "./newsSlice";
 import HeaderOverlay from "./HeaderOverlay";
@@ -253,42 +253,40 @@ const mockNewsData = [
 
 const App: React.FC = () => {
     const dispatch = useAppDispatch();
-    // const { news, error } = useSelector((state: RootState) => state.news);
-    const [news, setNews] = useState(mockNewsData);
+    const { news, loading, error } = useSelector((state: RootState) => state.news);
+    // const [news, setNews] = useState(mockNewsData);
     const [currentDate] = useState(new Date());
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [visibleNewsCount, setVisibleNewsCount] = useState(5);
-    const [isLoading, setIsLoading] = useState(false);
     const ref = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        const loadNews = async () => {
-            setIsLoading(true); 
+        const fetchLatestNews = () => {
             try {
-                await dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 })).unwrap();
-            } catch (error) {
-                if (error instanceof Error) {
-                    alert("Ошибка при загрузке новостей: " + error.message);
+                dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 })).unwrap();
+            } catch (e) {
+                if (e instanceof Error) {
+                    alert("Ошибка при загрузке новостей: " + e.message);
                 } else {
-                    console.error("Неизвестная ошибка:", error);
+                    console.error("Неизвестная ошибка:", e);
                     alert("Ошибка при загрузке новостей");
                 }
-            } finally {
-                setIsLoading(false);
             }
         };
 
-        loadNews();
+        fetchLatestNews();
 
+        const interval = setInterval(fetchLatestNews, 30000);
+
+        return () => clearInterval(interval);
     }, []);
+
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && !isLoading) {
-                    setIsLoading(true);
+                if (entries[0].isIntersecting && !loading) {
                     setVisibleNewsCount((prevCount) => prevCount + 5);
-                    setIsLoading(false);
                 }
             },
             { threshold: 0.9 }
@@ -305,17 +303,21 @@ const App: React.FC = () => {
         };
     }, []);
 
+    const memoizedOnMenuOpen = useCallback(() => {
+        setIsMenuOpen(true);
+    }, []);
+
     return (
         <div className="container">
             {isMenuOpen ? (
                 <HeaderOverlay onClose={() => setIsMenuOpen(false)} />
             ) : (
                 <>
-                    <Header onMenuOpen={() => setIsMenuOpen(true)} />
+                    <Header onMenuOpen={memoizedOnMenuOpen} />
                     <hr className="container__line" />
                     <NewsList news={news} visibleNewsCount={visibleNewsCount} />
                     <div ref={ref}></div>
-                    <Footer isLoading={isLoading} />
+                    <Footer/>
                 </>
             )}
         </div>
