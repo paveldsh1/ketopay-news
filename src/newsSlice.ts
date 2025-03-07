@@ -1,5 +1,6 @@
+// slice/newsSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { fetchNewsFromApi } from "./services/newsApi";
 
 interface NewsArticle {
   _id: string;
@@ -32,13 +33,9 @@ export const fetchNews = createAsyncThunk<
   "news/fetchNews",
   async ({ year, month }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:4000/news`, {
-        params: { year, month },
-      });
+      const response = await fetchNewsFromApi(year, month);
       return response.data.reverse();
     } catch (error: any) {
-      // console.error("Error fetching news:", error);
-
       if (error.code === "ERR_NETWORK") {
         return rejectWithValue({ error: "Network error: Unable to reach the server." });
       }
@@ -46,11 +43,11 @@ export const fetchNews = createAsyncThunk<
       if (error.response) {
         const status = error.response.status;
         const statusText = error.response.statusText;
-        
+
         if (status === 429) {
           return rejectWithValue({ error: "Too many requests. Please try again later." });
         }
-        
+
         return rejectWithValue({
           error: `Server error: ${status} ${statusText}`,
         });
@@ -77,8 +74,6 @@ const newsSlice = createSlice({
         const freshNews = action.payload.filter(
           (article: NewsArticle) => !state.news.some((old) => old._id === article._id)
         );
-
-        // console.log("fetchNews.fulfilled, freshNews:", freshNews)
 
         if (freshNews.length > 0) {
           state.news = [...freshNews, ...state.news];
