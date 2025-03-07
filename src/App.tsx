@@ -7,7 +7,6 @@ import NewsList from "./NewsList";
 import Footer from "./Footer";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
-import { memo } from 'react';
 
 const mockNewsData = [
     {

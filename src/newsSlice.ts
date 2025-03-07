@@ -1,23 +1,7 @@
 // slice/newsSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchNewsFromApi } from "./services/newsApi";
-
-interface NewsArticle {
-  _id: string;
-  pub_date: string;
-  source: string;
-  web_url: string;
-  abstract: string;
-  multimedia: {
-    url: string;
-  }[];
-}
-
-interface NewsState {
-  news: NewsArticle[];
-  loading: boolean;
-  error: string | null;
-}
+import { NewsArticle, NewsState } from "./types/news";
 
 const initialState: NewsState = {
   news: [],
