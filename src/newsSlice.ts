@@ -37,7 +37,7 @@ export const fetchNews = createAsyncThunk<
       });
       return response.data.reverse();
     } catch (error: any) {
-      console.error("Error fetching news:", error);
+      // console.error("Error fetching news:", error);
 
       if (error.code === "ERR_NETWORK") {
         return rejectWithValue({ error: "Network error: Unable to reach the server." });

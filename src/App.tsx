@@ -253,7 +253,7 @@ const mockNewsData = [
 ];
 
 const App: React.FC = () => {
-    console.log("App component rendered")
+    // console.log("App component rendered")
     const dispatch = useAppDispatch();
     const { news, loading, error } = useSelector((state: RootState) => state.news);
     // const [news, setNews] = useState(mockNewsData);
