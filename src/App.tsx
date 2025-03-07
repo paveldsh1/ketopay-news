@@ -282,6 +282,7 @@ const App: React.FC = () => {
             (entries) => {
                 if (entries[0].isIntersecting && !loading) {
                     setVisibleNewsCount((prevCount) => prevCount + 5);
+                    dispatch({ type: 'news/setLoading', payload: true });
                 }
             },
             { threshold: 0.9 }

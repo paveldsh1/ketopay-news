@@ -1,9 +1,11 @@
 import { useEffect, useState, memo } from "react";
 import { format } from "date-fns";
 import NewsItem from "./NewsItem";
+import { useAppDispatch } from "./hooks";
 
 const NewsList = memo(({ news, visibleNewsCount }: { news: any[]; visibleNewsCount: number }) => {
     const [displayedNewsCount, setDisplayedNewsCount] = useState(0);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (visibleNewsCount === 5) {
@@ -12,6 +14,7 @@ const NewsList = memo(({ news, visibleNewsCount }: { news: any[]; visibleNewsCou
         else {
             const timeout = setTimeout(() => {
                 setDisplayedNewsCount((prev) => prev + 5);
+                dispatch({ type: 'news/setLoading', payload: false });
             }, 2000);
 
             return () => clearTimeout(timeout);
