@@ -255,24 +255,20 @@ const mockNewsData = [
 const App: React.FC = () => {
     // console.log("App component rendered")
     const dispatch = useAppDispatch();
-    const { news, loading, error } = useSelector((state: RootState) => state.news);
+    const { news, loading } = useSelector((state: RootState) => state.news);
     // const [news, setNews] = useState(mockNewsData);
-    const [currentDate] = useState(new Date());
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [visibleNewsCount, setVisibleNewsCount] = useState(5);
     const ref = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (error) {
-            alert(error);
-        }
-    }, [error]);
-
-
-    useEffect(() => {
         const fetchLatestNews = () => {
-            dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 })).unwrap();
-        };
+            dispatch(fetchNews({ year: new Date().getFullYear(), month: new Date().getMonth() + 1 }))
+              .unwrap()
+              .catch((error) => {
+                alert(error.error)
+              });
+          };
 
         fetchLatestNews();
 
