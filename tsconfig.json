@@ -20,9 +20,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
   },
   "include": [
-    "src"
-, "public/scripts"  ]
+    "src",
+    "public/scripts",
+    "src/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
 }

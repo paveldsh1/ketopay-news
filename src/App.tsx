@@ -7,6 +7,7 @@ import NewsList from "./NewsList";
 import Footer from "./Footer";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import { memo } from 'react';
 
 const mockNewsData = [
     {
@@ -252,6 +253,7 @@ const mockNewsData = [
 ];
 
 const App: React.FC = () => {
+    console.log("App component rendered")
     const dispatch = useAppDispatch();
     const { news, loading, error } = useSelector((state: RootState) => state.news);
     // const [news, setNews] = useState(mockNewsData);
@@ -261,17 +263,15 @@ const App: React.FC = () => {
     const ref = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        if (error) {
+            alert(error);
+        }
+    }, [error]);
+
+
+    useEffect(() => {
         const fetchLatestNews = () => {
-            try {
-                dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 })).unwrap();
-            } catch (e) {
-                if (e instanceof Error) {
-                    alert("Ошибка при загрузке новостей: " + e.message);
-                } else {
-                    console.error("Неизвестная ошибка:", e);
-                    alert("Ошибка при загрузке новостей");
-                }
-            }
+            dispatch(fetchNews({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 })).unwrap();
         };
 
         fetchLatestNews();
@@ -285,7 +285,7 @@ const App: React.FC = () => {
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && !loading) {
+                if (entries[0].isIntersecting) {
                     setVisibleNewsCount((prevCount) => prevCount + 5);
                 }
             },
@@ -317,7 +317,7 @@ const App: React.FC = () => {
                     <hr className="container__line" />
                     <NewsList news={news} visibleNewsCount={visibleNewsCount} />
                     <div ref={ref}></div>
-                    <Footer/>
+                    <Footer />
                 </>
             )}
         </div>

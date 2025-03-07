@@ -17,12 +17,11 @@ app.get("/news", async (req: Request, res: Response) => {
             { params: { "api-key": API_KEY } }
         );
         res.json(response.data.response.docs);
-    } catch (error) {
-        console.error("Ошибка загрузки новостей:", error);
-        res.status(500).json({ error: "Ошибка загрузки новостей" });
+    } catch (error: any) {
+        res.status(error.response?.status || 500).json({ error: error || "Unknown error" });
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`Прокси-сервер запущен на http://localhost:${PORT}`);
+    console.log(`The proxy server is running on http://localhost:${PORT}`);
 });
