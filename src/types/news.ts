@@ -13,4 +13,7 @@ export interface NewsState {
     news: NewsArticle[];
     loading: boolean;
     error: string | null;
+    currentYear?: number;
+    currentMonth?: number;
+    isMonthChanged: boolean;
 }
