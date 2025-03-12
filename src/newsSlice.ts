@@ -8,7 +8,8 @@ const initialState: NewsState = {
   error: null,
   currentYear: new Date().getFullYear(),
   currentMonth: new Date().getMonth() + 1,
-  isMonthChanged: false
+  isMonthChanged: false,
+  visibleNewsCount: 5
 };
 
 export const fetchNews = createAsyncThunk<
@@ -53,6 +54,12 @@ const newsSlice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
+    },
+    setNews: (state, action) => {
+      state.news = action.payload;
+    },
+    setVisibleNewsCount: (state) => {
+      state.visibleNewsCount += 5;
     },
     setOlderNewsParams: (state) => {
       let newMonth = (state.currentMonth ?? new Date().getMonth() + 1) - 1;

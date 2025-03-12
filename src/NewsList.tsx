@@ -1,25 +1,29 @@
-import { useEffect, useState, memo, useMemo } from "react";
+import { memo, useEffect, useState, useMemo } from "react";
 import { format } from "date-fns";
 import NewsItem from "./NewsItem";
+import { NewsArticle } from "./types/news";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 
 interface NewsListProps {
-    news: any[];
-    visibleNewsCount: number;
+    news: NewsArticle[];
 }
 
-const NewsList = memo(({ news, visibleNewsCount }: NewsListProps) => {
+const NewsList: React.FC<NewsListProps> = memo(({ news }) => {
+    const { visibleNewsCount } = useSelector((state: RootState) => state.news);
     const [delayedCount, setDelayedCount] = useState(visibleNewsCount);
+
+    console.log("delayedCount", delayedCount)
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDelayedCount(visibleNewsCount);
         }, 2000);
-
         return () => clearTimeout(timeout);
-    }, [visibleNewsCount]); 
+    }, [visibleNewsCount]);
 
     const groupedNews = useMemo(() => {
-        return news.slice(0, delayedCount).reduce<Record<string, any[]>>((acc, item) => {
+        return news.slice(0, delayedCount).reduce<Record<string, NewsArticle[]>>((acc, item) => {
             const dateKey = format(new Date(item.pub_date), "dd.MM.yyyy");
             acc[dateKey] = acc[dateKey] || [];
             acc[dateKey].push(item);

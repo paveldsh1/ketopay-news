@@ -10,9 +10,8 @@ import { RootState } from "./store";
 
 const App: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { news, loading, currentYear, currentMonth, isMonthChanged } = useSelector((state: RootState) => state.news);
+    const { news, loading, currentYear, currentMonth, isMonthChanged, visibleNewsCount } = useSelector((state: RootState) => state.news);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [visibleNewsCount, setVisibleNewsCount] = useState(5);
     const [isFirstRequest, setIsFirstRequest] = useState(true);
     const ref = useRef<HTMLDivElement | null>(null);
 
@@ -60,9 +59,7 @@ const App: React.FC = () => {
             const observer = new IntersectionObserver(
                 (entries) => {
                     if (entries[0].isIntersecting && !loading) {
-                        setVisibleNewsCount((prevCount) => {
-                            return prevCount + 5
-                        });
+                        dispatch({ type: 'news/setVisibleNewsCount'});
                         dispatch({ type: 'news/setLoading', payload: true });
                     }
                 },
@@ -95,7 +92,7 @@ const App: React.FC = () => {
                 <>
                     <Header onMenuOpen={memoizedOnMenuOpen} />
                     <hr className="container__line" />
-                    <NewsList news={news} visibleNewsCount={visibleNewsCount}/>
+                    <NewsList news={news}/>
                     <div ref={ref}></div>
                     <Footer />
                 </>

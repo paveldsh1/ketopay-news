@@ -16,4 +16,5 @@ export interface NewsState {
     currentYear?: number;
     currentMonth?: number;
     isMonthChanged: boolean;
+    visibleNewsCount: number;
 }
