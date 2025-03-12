@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchNewsFromApi } from "./services/newsApi";
 import { NewsArticle, NewsState } from "./types/news";
 
@@ -20,7 +20,7 @@ export const fetchNews = createAsyncThunk<
   async ({ year, month }, { rejectWithValue }) => {
     try {
       const response = await fetchNewsFromApi(year, month);
-      return response.data.reverse().slice(0, 10);
+      return response.data.reverse();
     } catch (error: any) {
       if (error.code === "ERR_NETWORK") {
         return rejectWithValue({ error: "Network error: Unable to reach the server." });
@@ -76,12 +76,24 @@ const newsSlice = createSlice({
       })
       .addCase(fetchNews.fulfilled, (state, action) => {
         state.loading = false;
-        const freshNews = action.payload.filter(
-          (article: NewsArticle) => !state.news.some((old) => old._id === article._id)
-        );
 
-        if (freshNews.length > 0) {
-          state.news = [...freshNews, ...state.news];
+        const isSameArray = JSON.stringify(state.news) === JSON.stringify(action.payload);
+
+        if(!isSameArray) {
+          if (state.isMonthChanged) {
+            state.isMonthChanged = false;
+
+            const newArticles = action.payload.filter(
+              (article: NewsArticle) => !state.news.some((old) => old._id === article._id)
+            );
+
+            if (newArticles.length > 0) {
+              state.news = [...state.news, ...newArticles];
+            }
+          }
+          else {
+            state.news = [...action.payload, ...state.news];
+          }
         }
       })
       .addCase(fetchNews.rejected, (state, action) => {

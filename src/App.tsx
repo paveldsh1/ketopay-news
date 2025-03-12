@@ -13,12 +13,16 @@ const App: React.FC = () => {
     const { news, loading, currentYear, currentMonth, isMonthChanged } = useSelector((state: RootState) => state.news);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [visibleNewsCount, setVisibleNewsCount] = useState(5);
+    const [isFirstRequest, setIsFirstRequest] = useState(true);
     const ref = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const fetchLatestNews = () => {
             dispatch(fetchNews({ year: new Date().getFullYear(), month: new Date().getMonth() + 1 }))
                 .unwrap()
+                .then(() => {
+                    setIsFirstRequest(false);
+                })
                 .catch((error) => {
                     alert(error.error)
                 });
@@ -26,14 +30,14 @@ const App: React.FC = () => {
 
         if (!isMenuOpen) {
             fetchLatestNews();
-            const interval = setInterval(fetchLatestNews, 30000);
-            return () => clearInterval(interval);
+            // const interval = setInterval(fetchLatestNews, 30000);
+            // return () => clearInterval(interval);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMenuOpen]);
 
     useEffect(() => {
         const fetchOlderNews = () => {
-            dispatch({ type: 'news/setIsMonthChanged', payload: false })
             dispatch(fetchNews({
                 year: currentYear ?? new Date().getFullYear(),
                 month: currentMonth ?? new Date().getMonth() + 1
@@ -43,34 +47,41 @@ const App: React.FC = () => {
                     alert(error.error);
                 });
         };
- 
+
         if (news.length !== 0 && news.length <= visibleNewsCount) {
-            if(isMonthChanged) fetchOlderNews();
+            if (isMonthChanged) fetchOlderNews();
             else dispatch(setOlderNewsParams());
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [visibleNewsCount]);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting && !loading) {
-                    setVisibleNewsCount((prevCount) => prevCount + 5);
-                    dispatch({ type: 'news/setLoading', payload: true });
-                }
-            },
-            { threshold: 0.9 }
-        );
+        if (!isFirstRequest) {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting && !loading) {
+                        setVisibleNewsCount((prevCount) => {
+                            return prevCount + 5
+                        });
+                        dispatch({ type: 'news/setLoading', payload: true });
+                    }
+                },
+                { threshold: 0.9 }
+            );
 
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
-
-        return () => {
             if (ref.current) {
-                observer.unobserve(ref.current);
+                observer.observe(ref.current);
             }
-        };
-    }, [loading]);
+
+            return () => {
+                if (ref.current) {
+                    // eslint-disable-next-line react-hooks/exhaustive-deps
+                    observer.unobserve(ref.current);
+                }
+            };
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFirstRequest]);
 
     const memoizedOnMenuOpen = useCallback(() => {
         setIsMenuOpen(true);
@@ -84,7 +95,7 @@ const App: React.FC = () => {
                 <>
                     <Header onMenuOpen={memoizedOnMenuOpen} />
                     <hr className="container__line" />
-                    <NewsList news={news} visibleNewsCount={visibleNewsCount} />
+                    <NewsList news={news} visibleNewsCount={visibleNewsCount}/>
                     <div ref={ref}></div>
                     <Footer />
                 </>
