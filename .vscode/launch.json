@@ -9,25 +9,25 @@
             "webRoot": "${workspaceFolder}"
         },
         {
+            "name": "Debug Jest Tests",
             "type": "node",
             "request": "launch",
-            "name": "Launch Jest Tests",
-            "skipFiles": [
-                "<node_internals>/**"
+            "runtimeArgs": [
+                "--inspect-brk"
             ],
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
             "args": [
+                "src/tests",
                 "--runInBand",
-                "--config=jest.config.js",
-                "--no-cache"
+                "--no-cache",
+                "--env=jsdom",
+                "--watchAll=false"
             ],
-            "env": {
-                "NODE_OPTIONS": "--inspect-brk"
-            },
-            "port": 9229,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true
+            "env": {
+                "NODE_OPTIONS": "--experimental-vm-modules"
+            }
         }
     ]
 }
