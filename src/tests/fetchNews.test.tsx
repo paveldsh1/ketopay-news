@@ -1,6 +1,10 @@
+import { render, screen, waitFor } from "@testing-library/react";
 import { configureStore } from '@reduxjs/toolkit'; 
 import newsReducer, { fetchNews } from '../newsSlice';
 import { NewsArticle, NewsState } from '../types/news';
+import { Provider } from "react-redux";
+import NewsList from "../NewsList";
+import '@testing-library/jest-dom';
 
 const initialState: NewsState = {
     news: [
@@ -25,6 +29,8 @@ let store = configureStore({
 
 describe('newsSlice async actions', () => {
 
+    jest.setTimeout(20000);
+
     it('should initialize store with preloadedState', () => {
         const { news, loading, visibleNewsCount } = store.getState().news;
 
@@ -39,11 +45,25 @@ describe('newsSlice async actions', () => {
             { _id: '2', pub_date: '2025-03-07T10:00:00Z', source: 'The Guardian', web_url: 'https://example.com', abstract: 'Test news 1', multimedia: [] }
         ];
 
-        await store.dispatch(fetchNews.fulfilled(newArticles, 'test', { year: 2025, month: 3 }));
+        store.dispatch(fetchNews.fulfilled(newArticles, 'test', { year: 2025, month: 3 }));
 
         const { news, visibleNewsCount } = store.getState().news;
 
         expect(news.length).toBe(2);
         expect(visibleNewsCount).toBe(2);
+
+        render(
+            <Provider store={store}>
+                <NewsList news={store.getState().news.news} />
+            </Provider>
+        );
+
+        await waitFor(() => {
+            expect(screen.getByText('Test news 2')).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText('Test news 1')).toBeInTheDocument();
+        });
     });
 });

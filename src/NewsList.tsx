@@ -13,8 +13,6 @@ const NewsList: React.FC<NewsListProps> = memo(({ news }) => {
     const { visibleNewsCount } = useSelector((state: RootState) => state.news);
     const [delayedCount, setDelayedCount] = useState(visibleNewsCount);
 
-    console.log("delayedCount", delayedCount)
-
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDelayedCount(visibleNewsCount);
