@@ -99,13 +99,7 @@ const newsSlice = createSlice({
             }
           }
           else {
-            const newArticles = action.payload.filter(
-              (article: NewsArticle) => state.news.some((oldArticle) => oldArticle._id === article._id)
-            );
-
             state.news = action.payload;
-
-            state.visibleNewsCount += newArticles.length
           }
         }
       })
